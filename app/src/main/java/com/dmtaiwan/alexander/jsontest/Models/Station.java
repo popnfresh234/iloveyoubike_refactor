@@ -7,6 +7,10 @@ public class Station {
 
     private int id;
     private String sna;
+    private String snaen;
+    private double lat;
+    private double lng;
+    private long mday;
 
     public int getId() {
         return id;
@@ -23,4 +27,37 @@ public class Station {
     public void setSna(String sna) {
         this.sna = sna;
     }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public String getSnaen() {
+        return snaen;
+    }
+
+    public void setSnaen(String snaen) {
+        this.snaen = snaen;
+    }
+
+    public long getMday() {
+        return mday;
+    }
+
+    public void setMday(long mday) {
+        this.mday = mday;
+    }
+
 }

@@ -10,5 +10,7 @@ import java.util.List;
 public interface MainView {
     void fillAdapter(List<Station> stationList);
 
+    void showProgress();
 
+    void hideProgress();
 }

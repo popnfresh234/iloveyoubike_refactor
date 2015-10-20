@@ -1,4 +1,5 @@
 package com.dmtaiwan.alexander.jsontest.Models;
+
 import android.content.Context;
 
 import com.dmtaiwan.alexander.jsontest.Service.YoubikeService;
@@ -26,7 +27,15 @@ public class MainInteractorImpl implements MainInteractor {
 
     @Override
     public void fetchData() {
+        //First check if data is available, if so set adapter
+        if (Utilities.doesFileExist(mContext)) {
+            String json = Utilities.readFromFile(mContext);
+            mListener.onResult(json);
+        }
+
         if (Utilities.isNetworkAvailable(mContext)) {
+            //Show progress when we query network
+            mListener.showProgress();
             YoubikeService youbikeService = new YoubikeService();
             Observable<HttpResponse> httpResultObservable = youbikeService.loadStations();
             Action1<HttpResponse> subscriber = new Action1<HttpResponse>() {
@@ -40,15 +49,9 @@ public class MainInteractorImpl implements MainInteractor {
             httpResultObservable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
-        }else {
-            //Check if the file exists in storage
-            if (Utilities.doesFileExist(mContext)) {
-                String json = Utilities.readFromFile(mContext);
-                mListener.onResult(json);
-            }else{
-                //If not return null so we can set empty view
-                mListener.onResult(null);
-            }
+        } else {
+            //If not return null so we can set empty view
+            mListener.onResult(null);
         }
     }
 
@@ -74,8 +77,9 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
 
-
     public interface MainInteractorListener {
         void onResult(String json);
+
+        void showProgress();
     }
 }
