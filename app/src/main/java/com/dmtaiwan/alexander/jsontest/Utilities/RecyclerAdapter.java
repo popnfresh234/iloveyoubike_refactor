@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.dmtaiwan.alexander.jsontest.Bus.EventBus;
+import com.dmtaiwan.alexander.jsontest.Bus.RecyclerClickEvent;
 import com.dmtaiwan.alexander.jsontest.Models.Station;
 import com.dmtaiwan.alexander.jsontest.R;
 import com.squareup.okhttp.internal.Util;
@@ -95,9 +97,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View v) {
-            Log.i(LOG_TAG, "click");
+            int adapterPosition = getAdapterPosition();
+            Station station = mStationList.get(adapterPosition);
+            RecyclerClickEvent recyclerClickEvent = new RecyclerClickEvent(station);
+            EventBus.getInstance().post(recyclerClickEvent);
         }
     }
 

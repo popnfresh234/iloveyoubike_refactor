@@ -31,6 +31,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dmtaiwan.alexander.jsontest.Views.MainActivity" />
         </activity>
+
+        <activity android:name=".Views.DetailActivity" />
     </application>
 
 </manifest>

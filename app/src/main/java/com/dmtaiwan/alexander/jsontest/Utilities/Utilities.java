@@ -2,12 +2,14 @@ package com.dmtaiwan.alexander.jsontest.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 import com.dmtaiwan.alexander.jsontest.Models.Station;
+import com.dmtaiwan.alexander.jsontest.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +34,9 @@ public class Utilities {
     public static final Double TAPEI_LAT = 25.033611;
     public static final Double TAIPEI_LONG = 121.565;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public static final int ICON_SIZE_SMALL = 0;
+    public static final int ICON_SIZE_LARGE = 1;
 
     //Constants for shared prefs
     public static final String SHARED_PREFS_LOCATION_LAT_KEY = "com.dmtaiwan.alexander.key.location.lat";
@@ -177,6 +182,24 @@ public class Utilities {
         }
     }
 
+
+    public static int getStatusIconDrawable(int bikesAvailable, int spacesAvailable, int size) {
+        if (bikesAvailable > 0 && spacesAvailable > 0) {
+            return R.drawable.ic_green96x96;
+        } else if (spacesAvailable == 0) {
+            return R.drawable.ic_yellow96x96;
+        } else {
+            return R.drawable.ic_red96x96;
+        }
+    }
+
+    public static String buildShareText(Context context, String bikesAvailable, String spacesAvailable, String stationName, String lastUpdate) {
+        String shareText = context.getResources().getString(R.string.shareTextOne) + " " + bikesAvailable + " "
+                + context.getResources().getString(R.string.shareTextTwo) + " " + spacesAvailable + " "
+                + context.getResources().getString(R.string.shareTextThree) + " " + stationName + " "
+                + context.getString(R.string.shareTextFour) + " " + lastUpdate;
+        return shareText;
+    }
 }
 
 

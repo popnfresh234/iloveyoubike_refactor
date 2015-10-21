@@ -72,13 +72,17 @@ public class MainPresenterImpl implements MainPresenter, MainInteractorImpl.Main
                 int id = stationObject.getInt("_id");
                 String name = stationObject.getString("sna");
                 String engName = stationObject.getString("snaen");
+                String district = stationObject.getString("sarea");
+                String engDistrict = stationObject.getString("sareaen");
                 double stationLat = stationObject.getDouble("lat");
                 double stationLong = stationObject.getDouble("lng");
                 long time = stationObject.getLong("mday");
                 station.setId(id);
                 station.setSna(name);
                 station.setSnaen(engName);
-                station.setLat(stationLat);
+                station.setSarea(district);
+                station.setSareaen(engDistrict);
+                        station.setLat(stationLat);
                 station.setLng(stationLong);
                 station.setMday(time);
                 pojoStations.add(station);

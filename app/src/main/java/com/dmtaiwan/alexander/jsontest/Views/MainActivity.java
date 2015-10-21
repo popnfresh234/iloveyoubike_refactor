@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.dmtaiwan.alexander.jsontest.Bus.EventBus;
+import com.dmtaiwan.alexander.jsontest.Bus.RecyclerClickEvent;
 import com.dmtaiwan.alexander.jsontest.Models.Station;
 import com.dmtaiwan.alexander.jsontest.Presenters.MainPresenter;
 import com.dmtaiwan.alexander.jsontest.Presenters.MainPresenterImpl;
@@ -27,6 +29,7 @@ import com.dmtaiwan.alexander.jsontest.Utilities.RecyclerAdapter;
 import com.dmtaiwan.alexander.jsontest.Utilities.Utilities;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.squareup.otto.Subscribe;
 
 
 import java.util.List;
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -104,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
 
         //Check if GooglePlay is installed
         checkPlayServices();
+
+        //Register Bus
+        EventBus.getInstance().register(this);
     }
 
     @Override
@@ -119,6 +125,12 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     protected void onPause() {
         super.onPause();
         mLocationProvider.disconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(this);
     }
 
     @Override
@@ -170,6 +182,15 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     public void handleNewLocation(Location location) {
         Utilities.setUserLocation(location, this);
         mPresenter.requestData();
+    }
+
+    @Subscribe
+    public void onRecyclerViewClick(RecyclerClickEvent recyclerClickEvent) {
+        Log.i(LOG_TAG, "event");
+        Station station = recyclerClickEvent.getStation();
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("test", station);
+        startActivity(intent);
     }
 
     private boolean checkPlayServices() {
