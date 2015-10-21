@@ -3,7 +3,10 @@ package com.dmtaiwan.alexander.jsontest.Views;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     private LocationProvider mLocationProvider;
 
 
+
     @Bind(R.id.empty_view)
     View mEmptyView;
 
@@ -51,8 +55,13 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     @Bind(R.id.toolbar_progress_indicator)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.DrawerLayout)
+    @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+
+    @Bind(R.id.navigation_view)
+    NavigationView mNavigationView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +76,25 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
 
         //Set toolbar
         setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //Set adapter
         mAdapter = new RecyclerAdapter(this, mEmptyView);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Setup drawer
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
         //Create presenter
         mPresenter = new MainPresenterImpl(this, this);
         mPresenter.requestData();
@@ -107,6 +130,10 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
 
         if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
