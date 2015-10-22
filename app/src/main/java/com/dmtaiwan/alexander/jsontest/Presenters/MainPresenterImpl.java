@@ -1,6 +1,7 @@
 package com.dmtaiwan.alexander.jsontest.Presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dmtaiwan.alexander.jsontest.Models.MainInteractor;
 import com.dmtaiwan.alexander.jsontest.Models.MainInteractorImpl;
@@ -62,6 +63,7 @@ public class MainPresenterImpl implements MainPresenter, MainInteractorImpl.Main
     private List<Station> parseJson(String json) {
         List<Station> pojoStations = new ArrayList<Station>();
         try {
+
             JSONObject jsonString = new JSONObject(json);
             JSONObject result = jsonString.getJSONObject("result");
             JSONArray results = result.getJSONArray("results");
@@ -82,7 +84,7 @@ public class MainPresenterImpl implements MainPresenter, MainInteractorImpl.Main
                 station.setSnaen(engName);
                 station.setSarea(district);
                 station.setSareaen(engDistrict);
-                        station.setLat(stationLat);
+                station.setLat(stationLat);
                 station.setLng(stationLong);
                 station.setMday(time);
                 pojoStations.add(station);

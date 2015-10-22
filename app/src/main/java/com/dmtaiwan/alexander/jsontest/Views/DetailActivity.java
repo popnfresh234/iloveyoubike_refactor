@@ -106,10 +106,6 @@ public class DetailActivity extends AppCompatActivity {
             loadDetails();
         }
 
-        mStationDetailContainer.setPadding(0, 0, 0, 0);
-        mTitleView.setPadding(0, 0, 0, 0);
-        mBodyView.setPadding(0, 0, 0, 0);
-        mToolbar.setVisibility(View.VISIBLE);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
