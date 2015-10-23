@@ -5,9 +5,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     private LocationProvider mLocationProvider;
     private MainPresenter mPresenter;
     private List<Station> mStationsList;
+    private ShareActionProvider mShareActionProvider;
+    private MenuItem mShareItem;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -118,7 +122,14 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getResources().getBoolean(R.bool.isTablet)) {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
+            getMenuInflater().inflate(R.menu.menu_tablet, menu);
+            mShareItem = menu.findItem(R.id.action_share);
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mShareItem);
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.content_detail);
+            if (detailFragment == null) {
+                mShareItem.setVisible(false);
+            }
+
         } else {
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
@@ -206,5 +217,12 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
             return false;
         }
         return true;
+    }
+
+    public void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareItem.setVisible(true);
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 }

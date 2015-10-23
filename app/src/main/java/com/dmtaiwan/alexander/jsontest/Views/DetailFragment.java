@@ -105,6 +105,7 @@ public class DetailFragment extends Fragment {
         if (getArguments() != null) {
             mStation = getArguments().getParcelable(Utilities.EXTRA_STATION);
             loadDetails();
+
         }
 
 
@@ -180,6 +181,10 @@ public class DetailFragment extends Fragment {
         //Set share intent
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareIntent());
+        }
+
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            ((MainActivity)getActivity()).setShareIntent(createShareIntent());
         }
     }
 
