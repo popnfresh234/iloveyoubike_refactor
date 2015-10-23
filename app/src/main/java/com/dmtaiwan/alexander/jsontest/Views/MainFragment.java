@@ -206,7 +206,7 @@ public class MainFragment extends Fragment implements MainView, LocationProvider
         Log.i(LOG_TAG, "event");
         Station station = recyclerClickEvent.getStation();
         Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("test", station);
+        intent.putExtra(Utilities.EXTRA_STATION, station);
         startActivity(intent);
     }
 

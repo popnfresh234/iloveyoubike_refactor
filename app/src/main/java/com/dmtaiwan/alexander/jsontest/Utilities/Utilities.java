@@ -38,6 +38,9 @@ public class Utilities {
     public static final int ICON_SIZE_SMALL = 0;
     public static final int ICON_SIZE_LARGE = 1;
 
+    //Extra codes
+    public static final String EXTRA_STATION = "com.dmtaiwan.extra.station";
+
     //Constants for shared prefs
     public static final String SHARED_PREFS_LOCATION_LAT_KEY = "com.dmtaiwan.alexander.key.location.lat";
     public static final String SHARED_PREFS_LOCATION_LONG_KEY = "com.dmtaiwan.alexander.key.location.long";
@@ -171,7 +174,7 @@ public class Utilities {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         double lat = Double.longBitsToDouble(prefs.getLong(Utilities.SHARED_PREFS_LOCATION_LAT_KEY, 0));
         double longitude = Double.longBitsToDouble(prefs.getLong(Utilities.SHARED_PREFS_LOCATION_LONG_KEY, 0));
-        //If a location has been stored in shared prefs, retrieve it and set the lat/long coordinates for the query
+        //If activity_station_detai; location has been stored in shared prefs, retrieve it and set the lat/long coordinates for the query
         if (lat != 0 && longitude != 0) {
             Location userLocation = new Location("newLocation");
             userLocation.setLatitude(lat);

@@ -82,7 +82,7 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks, Go
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        //If error has a resolutionlet google play services resolve
+        //If error has activity_station_detai; resolutionlet google play services resolve
         if (connectionResult.hasResolution() && mContext instanceof Activity) {
             try {
                 Activity activity = (Activity) mContext;
