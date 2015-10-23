@@ -1,7 +1,6 @@
 package com.dmtaiwan.alexander.jsontest.Presenters;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dmtaiwan.alexander.jsontest.Models.MainInteractor;
 import com.dmtaiwan.alexander.jsontest.Models.MainInteractorImpl;

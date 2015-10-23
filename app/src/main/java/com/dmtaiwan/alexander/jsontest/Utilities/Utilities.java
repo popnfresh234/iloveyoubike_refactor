@@ -2,13 +2,11 @@ package com.dmtaiwan.alexander.jsontest.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
-import com.dmtaiwan.alexander.jsontest.Models.Station;
 import com.dmtaiwan.alexander.jsontest.R;
 
 import java.io.BufferedReader;
@@ -34,6 +32,10 @@ public class Utilities {
     public static final Double TAPEI_LAT = 25.033611;
     public static final Double TAIPEI_LONG = 121.565;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    //Fragment tags
+    public static final String FRAGMENT_TAG_MAIN = "main_fragment";
+    public static final String FRAGMENT_TAG_DETAIL = "detail_fragment";
 
     public static final int ICON_SIZE_SMALL = 0;
     public static final int ICON_SIZE_LARGE = 1;

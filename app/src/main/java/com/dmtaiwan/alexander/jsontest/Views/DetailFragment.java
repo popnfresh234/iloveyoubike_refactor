@@ -107,10 +107,17 @@ public class DetailFragment extends Fragment {
             loadDetails();
         }
 
-        //Set action bar
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        setHasOptionsMenu(true);
+
+
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            mToolbar.setVisibility(View.GONE);
+        }else{
+            setHasOptionsMenu(true);
+            //Set action bar
+            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         return rootView;
 
 
@@ -118,10 +125,12 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_detail, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        setShareIntent();
+        if (!getResources().getBoolean(R.bool.isTablet)) {
+            inflater.inflate(R.menu.menu_detail, menu);
+            MenuItem menuItem = menu.findItem(R.id.action_share);
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+            setShareIntent();
+        }
     }
 
     private void loadDetails() {
