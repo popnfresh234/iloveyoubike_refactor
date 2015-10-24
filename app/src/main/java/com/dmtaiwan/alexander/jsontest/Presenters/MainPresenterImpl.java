@@ -93,9 +93,13 @@ public class MainPresenterImpl implements MainPresenter, MainInteractorImpl.Main
             pojoStations = null;
         }
 
-        //Sort by distance
-        DistanceComparator comparator = new DistanceComparator(Utilities.getUserLocation(mContext));
-        Collections.sort(pojoStations, comparator);
+
+        if (pojoStations != null) {
+            //Sort by distance
+            DistanceComparator comparator = new DistanceComparator(Utilities.getUserLocation(mContext));
+            Collections.sort(pojoStations, comparator);
+        }
+
 
         return pojoStations;
     }

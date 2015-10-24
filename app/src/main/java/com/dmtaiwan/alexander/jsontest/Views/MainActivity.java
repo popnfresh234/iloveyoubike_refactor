@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
 
         //Create presenter
         mPresenter = new MainPresenterImpl(this, this);
-        mPresenter.requestData();
 
         //Setup location provider
         mLocationProvider = new LocationProvider(this, this);
@@ -89,16 +89,36 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
-                Log.i(LOG_TAG, String.valueOf(menuItem.getItemId()));
+                int id = menuItem.getItemId();
+
+                if (id == R.id.drawer_home) {
+                    MainFragment mainFragment = new MainFragment();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_main, mainFragment, Utilities.FRAGMENT_TAG_MAIN)
+                            .commit();
+                }
+
+                if (id == R.id.drawer_favourite) {
+                    FavoriteFragment favoriteFragment = new FavoriteFragment();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_main, favoriteFragment, Utilities.FRAGMENT_TAG_MAIN)
+                            .commit();
+                }
+
                 mDrawerLayout.closeDrawers();
                 return true;
             }
         });
 
-        //Launch Fragment
-        MainFragment mainFragment = new MainFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mainFragment, Utilities.FRAGMENT_TAG_MAIN)
-                .commit();
+        //If no fragment in content frame, create main fragment
+        if (getSupportFragmentManager().findFragmentById(R.id.content_main) == null) {
+            MainFragment mainFragment = new MainFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mainFragment, Utilities.FRAGMENT_TAG_MAIN)
+                    .commit();
+        }
+
     }
 
     @Override
@@ -168,9 +188,11 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     @Override
     public void fillAdapter(List<Station> stationList) {
         mStationsList = stationList;
-        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_main);
-        if (mainFragment != null) {
-            mainFragment.fillAdapter(stationList);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_main);
+        if (fragment instanceof MainFragment) {
+            ((MainFragment) fragment).fillAdapter(stationList);
+        }else if (fragment instanceof FavoriteFragment) {
+            ((FavoriteFragment) fragment).fillAdapter(stationList);
         }
 
     }
@@ -196,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
         Log.i(LOG_TAG, "event");
         if (getResources().getBoolean(R.bool.isTablet)) {
             loadDetailFragment(recyclerClickEvent.getStation());
-        }else {
+        } else {
             Station station = recyclerClickEvent.getStation();
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(Utilities.EXTRA_STATION, station);
@@ -224,5 +246,9 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
             mShareItem.setVisible(true);
             mShareActionProvider.setShareIntent(shareIntent);
         }
+    }
+
+    public void requestData(boolean isFavorites) {
+        mPresenter.requestData();
     }
 }

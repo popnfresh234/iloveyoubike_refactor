@@ -7,10 +7,15 @@
             android:id="@+id/drawer_home"
             android:checked="true"
             android:icon="@drawable/ic_home"
-            android:title="List of Stations"/>
+            android:title="All Stations"/>
 
         <item
             android:id="@+id/drawer_favourite"
+            android:icon="@drawable/ic_favorite_black_48dp"
+            android:title="Favorite Stations"/>
+
+        <item
+            android:id="@+id/drawer_map"
             android:icon="@drawable/ic_map_black_48dp"
             android:title="Map"/>
     </group>

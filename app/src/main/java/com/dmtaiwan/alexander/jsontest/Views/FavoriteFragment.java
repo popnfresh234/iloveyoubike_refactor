@@ -9,10 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dmtaiwan.alexander.jsontest.Bus.EventBus;
+import com.dmtaiwan.alexander.jsontest.Bus.FavoritesEvent;
 import com.dmtaiwan.alexander.jsontest.Models.Station;
 import com.dmtaiwan.alexander.jsontest.R;
 import com.dmtaiwan.alexander.jsontest.Utilities.RecyclerAdapter;
+import com.dmtaiwan.alexander.jsontest.Utilities.Utilities;
+import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -21,12 +26,13 @@ import butterknife.ButterKnife;
 /**
  * Created by Alexander on 10/22/2015.
  */
-public class MainFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
-    private static final String LOG_TAG = MainFragment.class.getSimpleName();
+    private static final String LOG_TAG = FavoriteFragment.class.getSimpleName();
 
 
     private RecyclerAdapter mAdapter;
+    private ArrayList<String> mFavoritesArray;
 
     @Bind(R.id.empty_view)
     View mEmptyView;
@@ -35,7 +41,14 @@ public class MainFragment extends Fragment {
     RecyclerView mRecyclerView;
 
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Get favorites array
+        mFavoritesArray = Utilities.getFavoriteArray(getActivity());
+        //Register event bus
+        EventBus.getInstance().register(this);
+    }
 
     @Nullable
     @Override
@@ -54,19 +67,38 @@ public class MainFragment extends Fragment {
 
         //Request data from MainActivity
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity)getActivity()).requestData(false);
+            ((MainActivity) getActivity()).requestData(true);
         }
+
 
         return rootView;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(this);
+    }
+
     public void fillAdapter(List<Station> stationList) {
-        if (mAdapter != null) {
-            if (stationList != null) {
-                mAdapter.updateData(stationList);
-            } else {
-                mAdapter.setEmptyView();
+        if (stationList != null && mFavoritesArray!= null) {
+            List<Station> favoriteStations = new ArrayList<Station>();
+            for (String id : mFavoritesArray) {
+                for (int i = 0; i < stationList.size(); i++) {
+                    Station station = stationList.get(i);
+                    if (String.valueOf(station.getId()).equals(id)) {
+                        favoriteStations.add(station);
+                    }
+                }
             }
+            mAdapter.updateData(favoriteStations);
+        }else{
+            mAdapter.setEmptyView();
         }
+    }
+
+    @Subscribe
+    public void onFavoritesEvent(FavoritesEvent favoritesEvent) {
+        mFavoritesArray = favoritesEvent.getFavoritesArray();
     }
 }

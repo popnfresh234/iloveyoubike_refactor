@@ -1,6 +1,7 @@
 package com.dmtaiwan.alexander.jsontest.Views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,12 +23,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dmtaiwan.alexander.jsontest.Bus.EventBus;
+import com.dmtaiwan.alexander.jsontest.Bus.FavoritesEvent;
 import com.dmtaiwan.alexander.jsontest.Models.Station;
 import com.dmtaiwan.alexander.jsontest.R;
 import com.dmtaiwan.alexander.jsontest.Utilities.Utilities;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Alexander on 10/23/2015.
@@ -44,6 +51,8 @@ public class DetailFragment extends Fragment {
     private int mSpacesAvailable;
     private String mLastUpdate;
     private ShareActionProvider mShareActionProvider;
+    private ArrayList<String> mFavoritesArray;
+    private boolean mIsFavorite;
 
     @Bind(R.id.image_view_station_detail_status)
     ImageView mStatus;
@@ -117,6 +126,25 @@ public class DetailFragment extends Fragment {
             //Set action bar
             ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
             ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        //Get Favorites Array
+        mFavoritesArray = Utilities.getFavoriteArray(getActivity());
+        //If a list of favorites has been stored in SharedPrefs
+        if (mFavoritesArray != null) {
+            //Set the favorite button and flag
+            if (mFavoritesArray.contains(String.valueOf(mStation.getId()))) {
+                mFavoriteButton.setImageResource(R.drawable.ic_favorite_black_48dp);
+                mIsFavorite = true;
+            }
+            //Button already un-favorite state by default, set flag
+            else {
+                mIsFavorite = false;
+            }
+        }
+        //If mFavoritesArray == null, no favorites have been stored, flag not favorite
+        else {
+            mIsFavorite = false;
         }
 
         return rootView;
@@ -202,5 +230,42 @@ public class DetailFragment extends Fragment {
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 
         return shareIntent;
+    }
+
+    @OnClick(R.id.button_station_detail_favorite)
+    public void onFavoriteClicked() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor spe = sharedPrefs.edit();
+        Gson gson = new Gson();
+
+        //If not a favorite station
+        if (!mIsFavorite) {
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_black_48dp);
+            mIsFavorite = true;
+
+            //If this is the first station favorited, create array of favorites and store in shared prefs
+            if (mFavoritesArray == null) {
+                mFavoritesArray = new ArrayList<String>();
+                mFavoritesArray.add(String.valueOf(mStation.getId()));
+
+            }
+            //Otherwise adding to the list of favorites
+            else {
+                mFavoritesArray.add(String.valueOf(mStation.getId()));
+            }
+        }
+        //If it is already a favorite station
+        else if (mIsFavorite) {
+            mIsFavorite = false;
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_outline_grey600_48dp);
+            int index = mFavoritesArray.indexOf(String.valueOf(mStation.getId()));
+            mFavoritesArray.remove(index);
+        }
+        //Convert array to json string and store in shared prefs
+        spe.putString(Utilities.SHARED_PREFS_FAVORITE_KEY, gson.toJson(mFavoritesArray));
+        spe.apply();
+        FavoritesEvent favoritesEvent = new FavoritesEvent();
+        favoritesEvent.setFavoritesArray(mFavoritesArray);
+        EventBus.getInstance().post(favoritesEvent);
     }
 }

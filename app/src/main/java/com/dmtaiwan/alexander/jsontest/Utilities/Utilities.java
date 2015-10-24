@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 import com.dmtaiwan.alexander.jsontest.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,9 +18,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -204,6 +208,19 @@ public class Utilities {
                 + context.getResources().getString(R.string.shareTextThree) + " " + stationName + " "
                 + context.getString(R.string.shareTextFour) + " " + lastUpdate;
         return shareText;
+    }
+
+    public static ArrayList<String> getFavoriteArray(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String favoriteJson = prefs.getString(Utilities.SHARED_PREFS_FAVORITE_KEY, "");
+        if (!favoriteJson.equals("")) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<String>>() {
+            }.getType();
+            return gson.fromJson(favoriteJson, type);
+        } else {
+            return null;
+        }
     }
 }
 
