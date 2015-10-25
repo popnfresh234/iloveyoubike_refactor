@@ -67,7 +67,7 @@ public class FavoriteFragment extends Fragment {
 
         //Request data from MainActivity
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).requestData(true);
+            ((MainActivity) getActivity()).requestData();
         }
 
 

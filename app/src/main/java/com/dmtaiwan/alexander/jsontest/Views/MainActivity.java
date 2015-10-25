@@ -107,6 +107,14 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
                             .commit();
                 }
 
+                if (id == R.id.drawer_map) {
+                    MapFragment mapFragment = new MapFragment();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_main, mapFragment, Utilities.FRAGMENT_TAG_MAIN)
+                            .commit();
+                }
+
                 mDrawerLayout.closeDrawers();
                 return true;
             }
@@ -186,15 +194,16 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
     }
 
     @Override
-    public void fillAdapter(List<Station> stationList) {
+    public void setData(List<Station> stationList) {
         mStationsList = stationList;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_main);
         if (fragment instanceof MainFragment) {
             ((MainFragment) fragment).fillAdapter(stationList);
         }else if (fragment instanceof FavoriteFragment) {
             ((FavoriteFragment) fragment).fillAdapter(stationList);
+        }else if (fragment instanceof MapFragment) {
+            ((MapFragment)fragment).setData(stationList);
         }
-
     }
 
     @Override
@@ -248,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Locatio
         }
     }
 
-    public void requestData(boolean isFavorites) {
+    public void requestData() {
         mPresenter.requestData();
     }
 }

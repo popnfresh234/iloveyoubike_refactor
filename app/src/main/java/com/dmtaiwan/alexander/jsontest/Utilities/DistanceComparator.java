@@ -21,8 +21,8 @@ public class DistanceComparator implements Comparator<Station> {
 
         if (mLocation == null) {
             double theta = station.getLng() - Utilities.TAIPEI_LONG;
-            double dist = Math.sin(deg2rad(station.getLat())) * Math.sin(deg2rad(Utilities.TAPEI_LAT))
-                    + Math.cos(deg2rad(station.getLat())) * Math.cos(deg2rad(Utilities.TAPEI_LAT))
+            double dist = Math.sin(deg2rad(station.getLat())) * Math.sin(deg2rad(Utilities.TAIPEI_LAT))
+                    + Math.cos(deg2rad(station.getLat())) * Math.cos(deg2rad(Utilities.TAIPEI_LAT))
                     * Math.cos(deg2rad(theta));
             dist = Math.acos(dist);
             dist = rad2deg(dist);

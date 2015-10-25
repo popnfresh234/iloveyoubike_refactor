@@ -48,4 +48,9 @@
     <string name="shareTextTwo">bikes available and</string>
     <string name="shareTextThree">spaces available at</string>
     <string name="shareTextFour">station as of</string>
+
+    <!--Map Strings-->
+    <string name="snippet_string_bikes">Bikes:</string>
+    <string name="snippet_string_spaces">Spaces:</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

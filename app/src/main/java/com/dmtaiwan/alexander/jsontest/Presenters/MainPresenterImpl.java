@@ -48,9 +48,9 @@ public class MainPresenterImpl implements MainPresenter, MainInteractorImpl.Main
         mView.hideProgress();
         if (json != null) {
             List<Station> stationList = parseJson(json);
-            mView.fillAdapter(stationList);
+            mView.setData(stationList);
         }else{
-            mView.fillAdapter(null);
+            mView.setData(null);
         }
     }
 

@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
 
         //Request data from MainActivity
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity)getActivity()).requestData(false);
+            ((MainActivity)getActivity()).requestData();
         }
 
         return rootView;

@@ -33,7 +33,7 @@ import java.util.Locale;
  */
 public class Utilities {
     public static final String fileName = "youbikeData.json";
-    public static final Double TAPEI_LAT = 25.033611;
+    public static final Double TAIPEI_LAT = 25.033611;
     public static final Double TAIPEI_LONG = 121.565;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -46,6 +46,8 @@ public class Utilities {
 
     //Extra codes
     public static final String EXTRA_STATION = "com.dmtaiwan.extra.station";
+    public static final String EXTRA_OUTSTATE_LATLNG = "com.dmtaiwan.extra.outstatelatlng";
+    public static final String EXTRA_STATION_ID = "com.dmtaiwan.extra.stationid";
 
     //Constants for shared prefs
     public static final String SHARED_PREFS_LOCATION_LAT_KEY = "com.dmtaiwan.alexander.key.location.lat";
@@ -200,6 +202,18 @@ public class Utilities {
         } else {
             return R.drawable.ic_red96x96;
         }
+    }
+
+    public static int getMarkerIconDrawable(int bikesAvailable, int spacesAvailable) {
+
+        if (bikesAvailable > 0 && spacesAvailable > 0) {
+            return R.drawable.ic_location_green;
+        } else if (spacesAvailable == 0) {
+            return R.drawable.ic_location_yellow;
+        } else {
+            return R.drawable.ic_location_red;
+        }
+
     }
 
     public static String buildShareText(Context context, String bikesAvailable, String spacesAvailable, String stationName, String lastUpdate) {
